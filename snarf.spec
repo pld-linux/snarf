@@ -23,14 +23,12 @@ sieciowych, takich jak WWW, FTP, finger i kilka innych...
 %if %{?BOOT:1}%{!?BOOT:0}
 %package BOOT
 Summary:	snarf for bootdisk
-Summary:	Non-interactive client for several network protocols (WWW, FTP)
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
 
 %description BOOT
 %endif
-
 
 %prep
 %setup -q
