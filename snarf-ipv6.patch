@@ -1,0 +1,172 @@
+diff -ur snarf-7.0/ftp.c snarf-7.0-/ftp.c
+--- snarf-7.0/ftp.c	Wed Aug  9 01:27:24 2000
++++ snarf-7.0-/ftp.c	Wed Jun 13 19:38:51 2001
+@@ -28,6 +28,8 @@
+ #include "ftp.h"
+ #include "options.h"
+ 
++extern int tcp_v6;
++
+ void
+ close_quit(int sock)
+ {
+@@ -166,24 +168,37 @@
+ {
+         unsigned char *addr;
+         struct sockaddr_in sa;
+-        int sock;
++        int sock = 0;
+         int x;
+         char *line, *orig_line;
+ 
+-        send_control(control, "PASV\r\n", NULL);
++	send_control(control, tcp_v6 ? "EPSV\r\n" : "PASV\r\n", NULL);
+ 
+         if( !((line = get_line(rsrc, control)) &&
+-              check_numeric("227", line)) ) {
++              check_numeric(tcp_v6 ? "229" : "227", line)) ) {
+                 safe_free(line);
+                 return 0;
+         }
+ 
+         orig_line = line;
+-
++	
+         if( strlen(line) < 4 ) {
+                 safe_free(line);
+                 return 0;
+         }
++	
++	if (tcp_v6) {
++		line += 4;
++		while (*line && *line != '(')
++			line++;
++		if (*line == 0 || *++line == 0)
++			goto oops;
++		if (line[1] != line[0] || line[2] != line[0])
++			goto oops;
++		sock = tcp_connect(rsrc->url->host, atoi(line+3));
++                goto oops;
++	}
++
+ 
+         if( !(sock = sock_init(&sa, control)) )
+                 return -1;
+@@ -217,6 +232,7 @@
+                 return -1;
+         }
+ 
++oops:
+         safe_free(orig_line);
+         return sock;
+ }
+diff -ur snarf-7.0/url.c snarf-7.0-/url.c
+--- snarf-7.0/url.c	Mon Nov 16 02:29:44 1998
++++ snarf-7.0-/url.c	Thu Jun 14 12:38:24 2001
+@@ -153,10 +153,24 @@
+ get_hostname(char *url, Url *u)
+ {
+         char *hostname;
+-        int i;
++        int i, n;
+ 
+-        /* skip to end, slash, or port colon */
+-        for( i = 0; url[i] && url[i] != '/' && url[i] != ':'; i++ );
++#define IPV6_PORT_CHAR '#'
++
++	/* check if it can be a v6 address */
++	n = 0;
++	for (i = 0; url[i] && url[i] != '/'; i++)
++		if (url[i] == ':')
++			n++;
++	if (n >= 2) {
++		/* we got ipv6 address */
++		n = IPV6_PORT_CHAR;
++	} else {
++		n = ':';
++	}
++
++	/* skip to end, slash, or port colon */
++        for( i = 0; url[i] && url[i] != '/' && url[i] != n; i++ );
+ 
+         hostname = malloc(i + 1);
+ 
+@@ -165,7 +179,7 @@
+         hostname[i] = '\0';
+ 
+         /* if there's a port */
+-        if(url[i] == ':')
++        if(url[i] == n)
+                 url += i + 1;
+         else
+                 url += i;
+diff -ur snarf-7.0/util.c snarf-7.0-/util.c
+--- snarf-7.0/util.c	Wed Aug  9 02:12:39 2000
++++ snarf-7.0-/util.c	Thu Jun 14 13:05:09 2001
+@@ -498,34 +498,55 @@
+         }
+ }
+ 
++#ifdef __UCLIBC__
++#define gethostbyname2(host,af) gethostbyname(host)
++#endif
++
++int tcp_v6;
+ 
+ int
+ tcp_connect(char *remote_host, int port) 
+ {
+         struct hostent *host;
+         struct sockaddr_in sa;
++	struct sockaddr_in6 sa6;
+         int sock_fd;
+ 
+-        if((host = (struct hostent *)gethostbyname(remote_host)) == NULL) {
++        if((host = (struct hostent *)gethostbyname2(remote_host, AF_INET)) == NULL &&
++	   (host = (struct hostent *)gethostbyname2(remote_host, AF_INET6)) == NULL) {
+                 herror(remote_host);
+                 return 0;
+         }
+ 
++	tcp_v6 = host->h_length == sizeof(sa6.sin6_addr);
++
+         /* get the socket */
+-        if((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
++        if((sock_fd = socket(tcp_v6 ? AF_INET6 : AF_INET, SOCK_STREAM, 0)) < 0) {
+                 perror("socket");
+                 return 0;
+         }
+ 
+-        /* connect the socket, filling in the important stuff */
+-        sa.sin_family = AF_INET;
+-        sa.sin_port = htons(port);
+-        memcpy(&sa.sin_addr, host->h_addr,host->h_length);
+-  
+-        if(connect(sock_fd, (struct sockaddr *)&sa, sizeof(sa)) < 0){
+-                perror(remote_host);
+-                return 0;
+-        }
++	if (tcp_v6) {
++	        /* connect the socket, filling in the important stuff */
++		sa6.sin6_family = AF_INET6;
++		sa6.sin6_port = htons(port);
++		memcpy(&sa6.sin6_addr, host->h_addr, sizeof(sa6.sin6_addr));
++	  
++		if(connect(sock_fd, (struct sockaddr *)&sa6, sizeof(sa6)) < 0){
++			perror(remote_host);
++			return 0;
++		}
++	} else {
++	        /* connect the socket, filling in the important stuff */
++		sa.sin_family = AF_INET;
++		sa.sin_port = htons(port);
++		memcpy(&sa.sin_addr, host->h_addr,sizeof(sa.sin_addr));
++		
++		if(connect(sock_fd, (struct sockaddr *)&sa, sizeof(sa)) < 0){
++			perror(remote_host);
++			return 0;
++		}
++	}
+ 
+         return sock_fd;
+ }
