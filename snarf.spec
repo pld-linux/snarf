@@ -24,7 +24,6 @@ like WWW, FTP, finger and some others...
 Snarf jest ma³ym, nieinteraktywnym klientem dla kilku protoko³ów
 sieciowych, takich jak WWW, FTP, finger i kilka innych...
 
-%if %{?BOOT:1}%{!?BOOT:0}
 %package BOOT
 Summary:	snarf for bootdisk
 Group:		Networking/Utilities
@@ -34,7 +33,7 @@ Group(pl):	Sieciowe/Narzêdzia
 Group(pt_BR):	Rede/Utilitários
 
 %description BOOT
-%endif
+snarf for bootdisk.
 
 %prep
 %setup -q
