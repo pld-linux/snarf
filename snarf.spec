@@ -41,6 +41,7 @@ Group(pt_BR):	Rede/Utilitários
 %patch0 -p1
 
 %build
+rm -f missing
 aclocal
 autoconf
 automake -a -c
