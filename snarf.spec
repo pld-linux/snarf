@@ -26,7 +26,7 @@ sieciowych, takich jak WWW, FTP, finger i kilka innych...
 
 %build
 rm -f missing
-aclocal
+%{__aclocal}
 %{__autoconf}
 %{__automake}
 
