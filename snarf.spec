@@ -48,9 +48,3 @@ rm -rf $RPM_BUILD_ROOT
 %doc *.gz
 %attr(755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1*
-
-%if %{!?_without_embed:1}%{?_without_embed:0}
-%files embed
-%defattr(644,root,root,755)
-%attr(755,root,root) %{embed_path}/*/%{name}
-%endif
