@@ -2,7 +2,7 @@ Summary:	Non-interactive client for several network protocols (WWW, FTP)
 Summary(pl):	Nieinteraktywny klient dla kilku protoko³ów (WWW, FTP)
 Name:		snarf
 Version:	7.0
-Release:	3
+Release:	4
 License:	GPL
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
