@@ -10,6 +10,7 @@ Group(pl):	Sieciowe/Narzêdzia
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
 Patch0:		%{name}-ipv6.patch
 Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+%{?BOOT:BuildRequires:	uClibc-devel-BOOT}
 
 %description
 Snarf is a small non-interactive client for several network protocols,
