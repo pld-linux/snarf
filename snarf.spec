@@ -2,7 +2,7 @@ Summary:	Non-interactive client for several network protocols (WWW, FTP)
 Summary(pl):	Nieinteraktywny klient dla kilku protoko³ów (WWW, FTP)
 Name:		snarf
 Version:	7.0
-Release:	8
+Release:	9
 License:	GPL
 Group:		Networking/Utilities
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
@@ -30,15 +30,16 @@ rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__automake}
-
 %configure \
 	--enable-guess-winsize
+
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
