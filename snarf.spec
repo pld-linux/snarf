@@ -1,9 +1,8 @@
-# _without_embed - don't build uClibc version
 Summary:	Non-interactive client for several network protocols (WWW, FTP)
 Summary(pl):	Nieinteraktywny klient dla kilku protoko³ów (WWW, FTP)
 Name:		snarf
 Version:	7.0
-Release:	6
+Release:	7
 License:	GPL
 Group:		Networking/Utilities
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
@@ -11,14 +10,6 @@ Patch0:		%{name}-ipv6.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 BuildRequires:	autoconf
 BuildRequires:	automake
-%if %{!?_without_embed:1}%{?_without_embed:0}
-BuildRequires:	uClibc-devel
-BuildRequires:	uClibc-static
-%endif
-
-%define embed_path	/usr/lib/embed
-%define embed_cc	%{_arch}-uclibc-cc
-%define embed_cflags	%{rpmcflags} -Os
 
 %description
 Snarf is a small non-interactive client for several network protocols,
@@ -27,17 +18,6 @@ like WWW, FTP, finger and some others...
 %description -l pl
 Snarf jest ma³ym, nieinteraktywnym klientem dla kilku protoko³ów
 sieciowych, takich jak WWW, FTP, finger i kilka innych...
-
-%package embed
-Summary:	snarf for bootdisk
-Summary(pl):	snarf na bootkietkê
-Group:		Networking/Utilities
-
-%description embed
-snarf for bootdisk.
-
-%description embed -l pl
-snarf na bootkietkê.
 
 %prep
 %setup -q
@@ -49,32 +29,12 @@ aclocal
 autoconf
 automake -a -c
 
-%if %{!?_without_embed:1}%{?_without_embed:0}
-%configure
-%{__make} \
-	CFLAGS="%{embed_cflags}" \
-	CC=%{embed_cc}
-mv -f %{name} %{name}-embed-shared
-%{__make} \
-	CFLAGS="%{embed_cflags}" \
-	LDFLAGS="-static" \
-	CC=%{embed_cc}
-mv -f %{name} %{name}-embed-static
-%{__make} clean
-%endif
-
 %configure \
 	--enable-guess-winsize
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-%if %{!?_without_embed:1}%{?_without_embed:0}
-install -d $RPM_BUILD_ROOT%{embed_path}/{shared,static}
-install %{name}-embed-shared $RPM_BUILD_ROOT%{embed_path}/shared/%{name}
-install %{name}-embed-static $RPM_BUILD_ROOT%{embed_path}/static/%{name}
-%endif
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
