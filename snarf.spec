@@ -8,7 +8,7 @@ Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
-Patch0:		snarf-ipv6.patch
+Patch0:		%{name}-ipv6.patch
 Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -24,6 +24,8 @@ sieciowych, takich jak WWW, FTP, finger i kilka innych...
 Summary:	snarf for bootdisk
 Summary:	Non-interactive client for several network protocols (WWW, FTP)
 Group:		Networking/Utilities
+Group(de):	Netzwerkwesen/Werkzeuge
+Group(pl):	Sieciowe/Narzêdzia
 
 %description BOOT
 %endif
@@ -37,7 +39,7 @@ Group:		Networking/Utilities
 %if %{?BOOT:1}%{!?BOOT:0}
 %configure 
 %{__make} \
-	CFLAGS="-m386 -I/usr/lib/bootdisk%{_includedir} -Os" \
+	CFLAGS="-m386 -I%{_libdir}/bootdisk%{_includedir} -Os" \
 	LDFLAGS="-nostdlib -static -s" \
 	LIBS="%{_libdir}/bootdisk%{_libdir}/crt0.o %{_libdir}/bootdisk%{_libdir}/libc.a -lgcc"
 mv -f %{name} %{name}-BOOT
