@@ -34,6 +34,7 @@ sieciowych, takich jak WWW, FTP, finger i kilka innych...
 
 %package embed
 Summary:	snarf for bootdisk
+Summary(pl):	snarf na bootkietkê
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
 Group(es):	Red/Utilitarios
@@ -42,6 +43,9 @@ Group(pt_BR):	Rede/Utilitários
 
 %description embed
 snarf for bootdisk.
+
+%description embed -l pl
+snarf na bootkietkê.
 
 %prep
 %setup -q
@@ -54,7 +58,7 @@ autoconf
 automake -a -c
 
 %if %{!?_without_embed:1}%{?_without_embed:0}
-%configure 
+%configure
 %{__make} \
 	CFLAGS="%{embed_cflags}" \
 	CC=%{embed_cc}
@@ -68,7 +72,7 @@ mv -f %{name} %{name}-embed-static
 %endif
 
 %configure \
-	--enable-guess-winsize 
+	--enable-guess-winsize
 %{__make}
 
 %install
