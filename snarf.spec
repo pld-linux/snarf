@@ -1,8 +1,9 @@
+# _without_embed - don't build uClibc version
 Summary:	Non-interactive client for several network protocols (WWW, FTP)
 Summary(pl):	Nieinteraktywny klient dla kilku protoko³ów (WWW, FTP)
 Name:		snarf
 Version:	7.0
-Release:	5
+Release:	6
 License:	GPL
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -14,7 +15,14 @@ Patch0:		%{name}-ipv6.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?BOOT:BuildRequires:	uClibc-devel-BOOT}
+%if %{!?_without_embed:1}%{?_without_embed:0}
+BuildRequires:	uClibc-devel
+BuildRequires:	uClibc-static
+%endif
+
+%define embed_path	/usr/lib/embed
+%define embed_cc	%{_arch}-uclibc-cc
+%define embed_cflags	%{rpmcflags} -Os
 
 %description
 Snarf is a small non-interactive client for several network protocols,
@@ -24,7 +32,7 @@ like WWW, FTP, finger and some others...
 Snarf jest ma³ym, nieinteraktywnym klientem dla kilku protoko³ów
 sieciowych, takich jak WWW, FTP, finger i kilka innych...
 
-%package BOOT
+%package embed
 Summary:	snarf for bootdisk
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -32,7 +40,7 @@ Group(es):	Red/Utilitarios
 Group(pl):	Sieciowe/Narzêdzia
 Group(pt_BR):	Rede/Utilitários
 
-%description BOOT
+%description embed
 snarf for bootdisk.
 
 %prep
@@ -44,13 +52,18 @@ rm -f missing
 aclocal
 autoconf
 automake -a -c
-%if %{?BOOT:1}%{!?BOOT:0}
+
+%if %{!?_without_embed:1}%{?_without_embed:0}
 %configure 
 %{__make} \
-	CFLAGS="-m386 -I%{_libdir}/bootdisk%{_includedir} -Os" \
-	LDFLAGS="-nostdlib -static -s" \
-	LIBS="%{_libdir}/bootdisk%{_libdir}/crt0.o %{_libdir}/bootdisk%{_libdir}/libc.a -lgcc"
-mv -f %{name} %{name}-BOOT
+	CFLAGS="%{embed_cflags}" \
+	CC=%{embed_cc}
+mv -f %{name} %{name}-embed-shared
+%{__make} \
+	CFLAGS="%{embed_cflags}" \
+	LDFLAGS="-static" \
+	CC=%{embed_cc}
+mv -f %{name} %{name}-embed-static
 %{__make} clean
 %endif
 
@@ -60,9 +73,11 @@ mv -f %{name} %{name}-BOOT
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%if %{?BOOT:1}%{!?BOOT:0}
-install -d $RPM_BUILD_ROOT%{_libdir}/bootdisk/sbin
-install %{name}-BOOT $RPM_BUILD_ROOT%{_libdir}/bootdisk/sbin/%{name}
+
+%if %{!?_without_embed:1}%{?_without_embed:0}
+install -d $RPM_BUILD_ROOT%{embed_path}/{shared,static}
+install %{name}-embed-shared $RPM_BUILD_ROOT%{embed_path}/shared/%{name}
+install %{name}-embed-static $RPM_BUILD_ROOT%{embed_path}/static/%{name}
 %endif
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
@@ -78,8 +93,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1*
 
-%if %{?BOOT:1}%{!?BOOT:0}
-%files BOOT
+%if %{!?_without_embed:1}%{?_without_embed:0}
+%files embed
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/bootdisk/sbin/%{name}
+%attr(755,root,root) %{embed_path}/*/%{name}
 %endif
