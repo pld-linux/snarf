@@ -2,12 +2,13 @@ Summary:	Non-interactive client for several network protocols (WWW, FTP)
 Summary(pl):	Nieinteraktywny klient dla kilku protoko³ów (WWW, FTP)
 Name:		snarf
 Version:	7.0
-Release:	2
+Release:	3
 License:	GPL
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
+Patch0:		snarf-ipv6.patch
 Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -30,6 +31,7 @@ Group:		Networking/Utilities
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %if %{?BOOT:1}%{!?BOOT:0}
