@@ -35,7 +35,7 @@ Group:		Networking/Utilities
 %if %{?BOOT:1}%{!?BOOT:0}
 %configure 
 %{__make} \
-	CFLAGS="-I/usr/lib/bootdisk%{_includedir} -Os" \
+	CFLAGS="-m386 -I/usr/lib/bootdisk%{_includedir} -Os" \
 	LDFLAGS="-nostdlib -static -s" \
 	LIBS="%{_libdir}/bootdisk%{_libdir}/crt0.o %{_libdir}/bootdisk%{_libdir}/libc.a -lgcc"
 mv -f %{name} %{name}-BOOT
