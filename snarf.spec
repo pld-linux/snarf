@@ -6,6 +6,7 @@ Release:	8
 License:	GPL
 Group:		Networking/Utilities
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
+# Source0-md5:	7470d8457bc0d347b5cd8668c9e735c4
 Patch0:		%{name}-ipv6.patch
 URL:		http://www.xach.com/snarf/
 BuildRequires:	autoconf
