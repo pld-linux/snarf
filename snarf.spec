@@ -27,7 +27,7 @@ sieciowych, takich jak WWW, FTP, finger i kilka innych...
 rm -f missing
 aclocal
 autoconf
-automake -a -c
+automake -a -c -f
 
 %configure \
 	--enable-guess-winsize
