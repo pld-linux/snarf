@@ -1,4 +1,4 @@
-Summary:	Snarf
+Summary:	Snarf - non-interactive client for several network protocols
 Name:		snarf
 Version:	7.0
 Release:	1
@@ -16,20 +16,22 @@ Snarf is a non-interactive client for several network protocols.
 %setup -q
 
 %build
-%configure --enable-guess-winsize 
+%configure \
+	--enable-guess-winsize 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
-gzip -9nf README ChangeLog TODO
 
-%files
-%defattr(644,root,root,755)
-%doc README
-%attr(755,root,root) %{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
-%doc README.* ChangeLog.* TODO.*
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
+
+gzip -9nf README* ChangeLog TODO
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(644,root,root,755)
+%doc *.gz
+%attr(755,root,root) %{_bindir}/%{name}
+%{_mandir}/man1/%{name}.1*
