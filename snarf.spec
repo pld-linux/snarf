@@ -6,10 +6,14 @@ Release:	5
 License:	GPL
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
+Group(es):	Red/Utilitarios
 Group(pl):	Sieciowe/Narzêdzia
+Group(pt_BR):	Rede/Utilitários
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
 Patch0:		%{name}-ipv6.patch
-Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+BuildRequires:	autoconf
+BuildRequires:	automake
 %{?BOOT:BuildRequires:	uClibc-devel-BOOT}
 
 %description
@@ -25,7 +29,9 @@ sieciowych, takich jak WWW, FTP, finger i kilka innych...
 Summary:	snarf for bootdisk
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
+Group(es):	Red/Utilitarios
 Group(pl):	Sieciowe/Narzêdzia
+Group(pt_BR):	Rede/Utilitários
 
 %description BOOT
 %endif
