@@ -1,7 +1,8 @@
-Summary:	Snarf - non-interactive client for several network protocols
+Summary:	Non-interactive client for several network protocols (WWW, FTP)
+Summary(pl):	Nieinteraktywny klient dla kilku protoko³ów (WWW, FTP)
 Name:		snarf
 Version:	7.0
-Release:	1
+Release:	2
 License:	GPL
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -10,7 +11,12 @@ Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
 Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Snarf is a non-interactive client for several network protocols.
+Snarf is a small non-interactive client for several network protocols,
+like WWW, FTP, finger and some others...
+
+%description -l pl
+Snarf jest ma³ym, nieinteraktywnym klientem dla kilku protoko³ów
+sieciowych, takich jak WWW, FTP, finger i kilka innych...
 
 %prep
 %setup -q
