@@ -107,7 +107,7 @@ diff -ur snarf-7.0/util.c snarf-7.0-/util.c
          }
  }
  
-+#ifdef __UCLIBC__
++#if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__)
 +#define gethostbyname2(host,af) gethostbyname(host)
 +#endif
 +
