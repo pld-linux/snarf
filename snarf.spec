@@ -36,6 +36,8 @@ Group(pl):	Sieciowe/Narzêdzia
 %patch0 -p1
 
 %build
+aclocal
+autoconf
 %if %{?BOOT:1}%{!?BOOT:0}
 %configure 
 %{__make} \
