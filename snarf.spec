@@ -1,5 +1,5 @@
 Summary:	Non-interactive client for several network protocols (WWW, FTP)
-Summary(pl):	Nieinteraktywny klient dla kilku protoko≥Ûw (WWW, FTP)
+Summary(pl.UTF-8):   Nieinteraktywny klient dla kilku protoko≈Ç√≥w (WWW, FTP)
 Name:		snarf
 Version:	7.0
 Release:	12
@@ -17,8 +17,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Snarf is a small non-interactive client for several network protocols,
 like WWW, FTP, finger and some others...
 
-%description -l pl
-Snarf jest ma≥ym, nieinteraktywnym klientem dla kilku protoko≥Ûw
+%description -l pl.UTF-8
+Snarf jest ma≈Çym, nieinteraktywnym klientem dla kilku protoko≈Ç√≥w
 sieciowych, takich jak WWW, FTP, finger i kilka innych...
 
 %prep
