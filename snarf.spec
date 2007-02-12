@@ -1,5 +1,5 @@
 Summary:	Non-interactive client for several network protocols (WWW, FTP)
-Summary(pl.UTF-8):   Nieinteraktywny klient dla kilku protokołów (WWW, FTP)
+Summary(pl.UTF-8):	Nieinteraktywny klient dla kilku protokołów (WWW, FTP)
 Name:		snarf
 Version:	7.0
 Release:	12
