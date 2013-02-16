@@ -14,8 +14,8 @@ diff -ur snarf-7.0/ftp.c snarf-7.0-/ftp.c
  {
          unsigned char *addr;
          struct sockaddr_in sa;
--        int sock;
-+        int sock = 0;
+-        int sock, commas;
++        int sock = 0, commas;
          int x;
          char *line, *orig_line;
  

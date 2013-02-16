@@ -7,7 +7,10 @@ License:	GPL
 Group:		Networking/Utilities
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
 # Source0-md5:	7470d8457bc0d347b5cd8668c9e735c4
-Patch0:		%{name}-ipv6.patch
+Patch0:		ftp://ftp.debian.org:/debian/pool/main/s/snarf/snarf_7.0-5.diff.gz
+# Patch0-md5:	d306ec929b852f5a7b52df4aeeb0813c
+Patch1:		%{name}-ipv6.patch
+Patch2:		%{name}-build.patch
 URL:		http://www.xach.com/snarf/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -24,6 +27,8 @@ sieciowych, takich jak WWW, FTP, finger i kilka innych...
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 rm -f missing
