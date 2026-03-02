@@ -1,6 +1,6 @@
-diff -ur snarf-7.0/ftp.c snarf-7.0-/ftp.c
---- snarf-7.0/ftp.c	Wed Aug  9 01:27:24 2000
-+++ snarf-7.0-/ftp.c	Wed Jun 13 19:38:51 2001
+diff -urNp -x '*.orig' snarf-7.0.org/ftp.c snarf-7.0/ftp.c
+--- snarf-7.0.org/ftp.c	2026-03-03 00:26:38.523005389 +0100
++++ snarf-7.0/ftp.c	2026-03-03 00:26:38.597980712 +0100
 @@ -28,6 +28,8 @@
  #include "ftp.h"
  #include "options.h"
@@ -10,7 +10,7 @@ diff -ur snarf-7.0/ftp.c snarf-7.0-/ftp.c
  void
  close_quit(int sock)
  {
-@@ -166,24 +168,37 @@
+@@ -166,24 +168,37 @@ get_passive_sock(UrlResource *rsrc, int
  {
          unsigned char *addr;
          struct sockaddr_in sa;
@@ -50,9 +50,9 @@ diff -ur snarf-7.0/ftp.c snarf-7.0-/ftp.c
 +	}
 +
  
-         if( !(sock = sock_init(&sa, control)) )
-                 return -1;
-@@ -217,6 +232,7 @@
+         commas = 0;
+         while (*line)
+@@ -229,6 +244,7 @@ get_passive_sock(UrlResource *rsrc, int
                  return -1;
          }
  
@@ -60,10 +60,10 @@ diff -ur snarf-7.0/ftp.c snarf-7.0-/ftp.c
          safe_free(orig_line);
          return sock;
  }
-diff -ur snarf-7.0/url.c snarf-7.0-/url.c
---- snarf-7.0/url.c	Mon Nov 16 02:29:44 1998
-+++ snarf-7.0-/url.c	Thu Jun 14 12:38:24 2001
-@@ -153,10 +153,24 @@
+diff -urNp -x '*.orig' snarf-7.0.org/url.c snarf-7.0/url.c
+--- snarf-7.0.org/url.c	1998-11-16 02:29:44.000000000 +0100
++++ snarf-7.0/url.c	2026-03-03 00:26:38.598164815 +0100
+@@ -153,10 +153,24 @@ static char *
  get_hostname(char *url, Url *u)
  {
          char *hostname;
@@ -91,7 +91,7 @@ diff -ur snarf-7.0/url.c snarf-7.0-/url.c
  
          hostname = malloc(i + 1);
  
-@@ -165,7 +179,7 @@
+@@ -165,7 +179,7 @@ get_hostname(char *url, Url *u)
          hostname[i] = '\0';
  
          /* if there's a port */
@@ -100,10 +100,10 @@ diff -ur snarf-7.0/url.c snarf-7.0-/url.c
                  url += i + 1;
          else
                  url += i;
-diff -ur snarf-7.0/util.c snarf-7.0-/util.c
---- snarf-7.0/util.c	Wed Aug  9 02:12:39 2000
-+++ snarf-7.0-/util.c	Thu Jun 14 13:05:09 2001
-@@ -498,34 +498,55 @@
+diff -urNp -x '*.orig' snarf-7.0.org/util.c snarf-7.0/util.c
+--- snarf-7.0.org/util.c	2026-03-03 00:26:38.523304282 +0100
++++ snarf-7.0/util.c	2026-03-03 00:26:38.598300136 +0100
+@@ -502,34 +502,55 @@ report(enum report_levels lev, char *for
          }
  }
  
