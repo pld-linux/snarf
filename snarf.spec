@@ -2,7 +2,7 @@ Summary:	Non-interactive client for several network protocols (WWW, FTP)
 Summary(pl.UTF-8):	Nieinteraktywny klient dla kilku protokołów (WWW, FTP)
 Name:		snarf
 Version:	7.0
-Release:	13
+Release:	14
 License:	GPL
 Group:		Networking/Utilities
 Source0:	ftp://ftp.mint.net/pub/snarf/%{name}-%{version}.tar.gz
@@ -36,6 +36,7 @@ rm -f missing
 %{__autoconf}
 %{__automake}
 %configure \
+	CFLAGS="%{rpmcflags} -std=gnu89" \
 	--enable-guess-winsize
 
 %{__make}
